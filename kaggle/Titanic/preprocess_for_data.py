@@ -25,7 +25,9 @@ def drop_columns(all_df):
     # drop the column CABIN
     all_df.drop(['Cabin', 'Ticket'], axis=1, inplace=True)
     # drop the two NAN row of the Embarked
-    all_df.dropna(how='any', inplace=True)
+    #all_df.dropna(how='any', inplace=True)
+    all_df['Embarked'].fillna(0.0, inplace=True)
+    all_df['Fare'].fillna(0.0, inplace=True)
 
 
 def fill_non_age(all_df):
@@ -72,5 +74,5 @@ def preprocess_for_test_data(TEST_PATH, RESULT_TEST_PATH):
     fill_non_age(all_df)
     all_df = label_encoder(all_df)
     drop_columns(all_df)
-    all_df.drop(all_df.columns[len(all_df.columns) - 1], axis=1, inplace=True)
+    #all_df.drop(all_df.columns[len(all_df.columns) - 1], axis=1, inplace=True)
     all_df.to_csv(RESULT_TEST_PATH, index=False)
