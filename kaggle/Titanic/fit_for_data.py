@@ -49,10 +49,6 @@ def start_to_fit(X, y):
                 accuracy_dic[name] += accuracy
             else:
                 accuracy_dic[name] = accuracy
-        
-
-
-
 
     for clf in accuracy_dic:
         accuracy_dic[clf] = accuracy_dic[clf] / 10.0
