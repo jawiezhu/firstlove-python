@@ -3,7 +3,7 @@
 from get_data_report import *
 from preprocess_for_data import *
 from fit_for_data import *
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import GradientBoostingClassifier,VotingClassifier
 from sklearn.model_selection import GridSearchCV
 
 
@@ -26,6 +26,11 @@ def get_data_from_file():
     y = np.array(train_df.iloc[:, -1])
 
     start_to_fit(X, y)
+    #fit_another_approach(X, y)
+
+    #fit_with_rf(X, y, RESULT_TEST_PATH, RESULT_PATH)
+
+
 
 def predict_test():
     train_df = pd.read_csv(RESULT_TRAIN_PATH)
@@ -44,9 +49,10 @@ def predict_test():
     print(clf.best_score_)
     print(clf.best_params_)
 
+
     test_df = pd.read_csv(RESULT_TEST_PATH)
     test = np.array(test_df)
-    new_clf = GradientBoostingClassifier(learning_rate=0.01, max_depth=5, n_estimators=200)
+    new_clf = GradientBoostingClassifier(learning_rate=0.01, max_depth=5, n_estimators=100)
     new_clf.fit(X,y)
     result = new_clf.predict(test)
     test_df.insert(test_df.columns.size, 'Survived', result)
@@ -54,11 +60,12 @@ def predict_test():
     test_df = test_df[['PassengerId', 'Survived']]
     test_df['PassengerId'] = test_df['PassengerId'].apply(np.int64)
     test_df.to_csv(RESULT_PATH, index=False)
+    print('finish!')
 
 
 
 
 if __name__ == '__main__':
-    #cleaning_data()
-    #get_data_from_file()
+    cleaning_data()
+    get_data_from_file()
     predict_test()

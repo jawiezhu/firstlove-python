@@ -7,8 +7,8 @@ Created on Tue Dec 19 21:39:58 2017
 
 class TreeNode:
     def __init__(self,val):
-        this.val = val
-        this.left, this.right = None, None
+        self.val = val
+        self.left, self.right = None, None
         
 class Solution:
     

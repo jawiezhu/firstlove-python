@@ -8,7 +8,7 @@ Created on Tue Dec 19 20:41:55 2017
 class TreeNode:
     def __init__(self,val):
         self.val = val
-        self.left , self.right = None, None
+        self.left, self.right = None, None
         
 class Solution:
     def invertBinaryTree(self, root):
