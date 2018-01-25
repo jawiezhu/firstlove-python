@@ -4,7 +4,7 @@ from get_data_report import *
 from preprocess_for_data import *
 from fit_for_data import *
 from sklearn.ensemble import GradientBoostingClassifier,VotingClassifier
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, cross_val_score
 
 
 RAW_TRAIN_FILE = r'./data/train.csv'
@@ -25,11 +25,14 @@ def get_data_from_file():
     X = np.array(train_df.loc[:, train_df.columns != 'target'])
     y = np.array(train_df.iloc[:, -1])
 
-    start_to_fit(X, y)
+    #start_to_fit(X, y)
     #fit_another_approach(X, y)
+    #voting_fit(X,y,RESULT_TEST_PATH, RESULT_PATH)
+    fit_with_rf(X, y, RESULT_TEST_PATH, RESULT_PATH)
 
-    #fit_with_rf(X, y, RESULT_TEST_PATH, RESULT_PATH)
-
+def compute_score(clf, X, y, scoring='accuracy'):
+    xval = cross_val_score(clf, X, y, cv = 5, scoring=scoring)
+    return np.mean(xval)
 
 
 def predict_test():
@@ -39,8 +42,8 @@ def predict_test():
 
 
     parameters ={
-        'learning_rate': [0.01, 0.05],
-        'n_estimators': [100, 200,500],
+        'learning_rate': [0.01,0.15],
+        'n_estimators': [100, 200,300,500],
         'max_depth': [5, 7]
     }
 
@@ -52,8 +55,10 @@ def predict_test():
 
     test_df = pd.read_csv(RESULT_TEST_PATH)
     test = np.array(test_df)
-    new_clf = GradientBoostingClassifier(learning_rate=0.01, max_depth=5, n_estimators=100)
+    new_clf = GradientBoostingClassifier(learning_rate=0.01, max_depth=3, n_estimators=100)
+    #new_clf = LinearDiscriminantAnalysis()
     new_clf.fit(X,y)
+    print compute_score(new_clf, X, y)
     result = new_clf.predict(test)
     test_df.insert(test_df.columns.size, 'Survived', result)
 
@@ -68,4 +73,4 @@ def predict_test():
 if __name__ == '__main__':
     cleaning_data()
     get_data_from_file()
-    predict_test()
+    #predict_test()
