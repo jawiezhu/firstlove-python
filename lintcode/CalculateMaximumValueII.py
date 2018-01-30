@@ -52,8 +52,36 @@ class Solution:
         return max_value
 
 
+    def maxValue(self, _str):
+        item = list(_str)
+        item_len = len(item)
+        N = 5
+        for i in range(0, item_len):
+            item[i] = int(item[i])
+
+        arr_max = [[0 for i in range(N)] for i in range(N)]
+        mmax = 0
+
+        for i in range(0, item_len):
+            arr_max[i][i] = item[i]
+
+        for i in range(1, item_len):
+            for j in range(0, item_len):
+                for k in range(0, i):
+                    print 'i=' + str(i) + '  j=' +str(j) + '   k=' + str(k)
+                    print arr_max
+                    arr_max[j][j+i] = max(arr_max[j][j+i], arr_max[j][j+k] * arr_max[j+k+1][j+i])
+                    print arr_max
+                    arr_max[j][j+i] = max(arr_max[j][j+i], arr_max[j][j+k] + arr_max[j+k+1][j+i])
+                    print arr_max
+                    mmax = max(mmax, arr_max[j][j+i])
+
+
+        print mmax
+
+
 
 if __name__ == "__main__":
     s = Solution()
-    _str = "11111111"
-    print(s.maxValue_failed(_str))
+    _str = "123"
+    print(s.maxValue(_str))
